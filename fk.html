@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد</title>
+    <link rel="stylesheet" href="style.css"> <!-- استدعاء ملف CSS بدلاً من صورة -->
+    <link rel="icon" type="image/png" href="health.png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FAFAFA;
+            text-align: center;
+        }
+
+        .navbar {
+            background-color: #DE3163;
+            padding: 15px 30px;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+
+        .doctor-profile {
+            background-color: #FFFFFF;
+            margin: 50px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .doctor-profile h2 {
+            color: #DE3163;
+            font-size: 30px;
+        }
+        .doctor-profile input {
+            width: 80%;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-size: 18px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .book-appointment-btn {
+            background-color: #DE3163;
+            color: white;
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .book-appointment-btn:hover {
+            background-color: #b40f3e;
+        }
+        img {
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            display: block;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid #DE3163;
+            filter: invert(5%);
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="html.html">الرئيسية</a>
+        <a href="doctorr.html">عن الطبيب</a>
+        <a href="#">حجز موعد</a>
+    </div>
+
+    <div class="doctor-profile">
+        <h2>تسجيل الدخول</h2>
+        <img src="images.png" alt="">
+        <label for="name">الاسم الكامل:</label>
+        <input type="text" id="name" required>
+
+        <label for="pass">كلمة المرور:</label>
+        <input type="password" id="pass"  required> <!-- تم التغيير إلى type="password" -->
+
+        <button type="button" class="book-appointment-btn" onclick="checkUserData()">إرسال الطلب</button>
+    </div>
+
+    <script>
+        function checkUserData() {
+            const name = document.getElementById('name').value;
+            const pass = document.getElementById('pass').value; // تم تصحيح معرف كلمة المرور
+
+            if (name === "adim" && pass === "123") {
+                window.location.href = "pas.html";
+            } else {
+                alert("❌ اسم المستخدم أو كلمة المرور غير صحيحة");
+            }
+        }
+    </script>
+</body>
+</html>

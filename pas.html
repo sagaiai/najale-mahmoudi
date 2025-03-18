@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>doctor-profile</title>
+    <link rel="icon" type="image/png" href="health.png">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #FAFAFA;
+            text-align: center;
+        }
+        .navbar {
+            background-color: #DE3163;
+            padding: 15px 30px;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
+        }
+        .doctor-profile {
+            background-color: #FFFFFF;
+            margin: 50px auto;
+            padding: 20px;
+            width: 80%;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .doctor-profile h2 {
+            color: #DE3163;
+            margin-bottom: 20px;
+        }
+        .appointments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .appointments-table th, .appointments-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .delete-btn {
+            background: #DE3163;
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background: #a11039;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="html.html">الرئيسية</a>
+        <a href="doctorr.html">عن الطبيب</a>
+        <a href="h.html">حجز موعد</a>
+    </div>
+    <div class="doctor-profile">
+        <h2>المواعيد التي حُجزت</h2>
+    </div>
+    <div class="line"></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue, remove } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+    
+        const firebaseConfig = {
+            apiKey: "AIzaSyDHwQFl7",
+            authDomain: "apppp-e6d3b.firebaseapp.com",
+            projectId: "apppp-e6d3b",
+            storageBucket: "apppp-e6d3b.appspot.com",
+            messagingSenderId: "606593845407",
+            appId: "1:606593845407:web:221d65637d40c3d94a7aaa"
+        };
+    
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+    
+        function loadBookedAppointments() {
+            const appointmentsRef = ref(database, "appointments");
+            const list = document.querySelector(".doctor-profile");
+    
+            onValue(appointmentsRef, (snapshot) => {
+                list.innerHTML = "<h2>المواعيد التي حُجزت</h2>"; // إعادة تعيين القائمة
+    
+                const bookedAppointments = snapshot.val();
+                if (!bookedAppointments) {
+                    list.innerHTML += "<p>❌ لا توجد مواعيد محجوزة حاليًا</p>";
+                    return;
+                }
+
+                // تحويل البيانات إلى مصفوفة وفرزها حسب التاريخ
+                const sortedAppointments = Object.entries(bookedAppointments)
+                    .map(([key, appointment]) => ({
+                        key,
+                        ...appointment,
+                        timestamp: new Date(`${appointment.date} ${appointment.time}`).getTime() // تحويل إلى timestamp للفرز
+                    }))
+                    .sort((a, b) => a.timestamp - b.timestamp); // فرز حسب التاريخ
+                    
+                // إنشاء الجدول
+                const table = document.createElement("table");
+                table.className = "appointments-table";
+                
+                // رأس الجدول
+                const thead = document.createElement("thead");
+                const headerRow = document.createElement("tr");
+                headerRow.innerHTML = `
+                    <th>الاسم</th>
+                    <th>رقم الهاتف</th>
+                    <th>التاريخ</th>
+                    <th>الوقت</th>
+                    
+                    <th>الإجراء</th>
+                `;
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // جسم الجدول
+                const tbody = document.createElement("tbody");
+
+                sortedAppointments.forEach(({ key, bookedBy, phone, time, date, age }) => {
+                    const row = document.createElement("tr");
+
+                    row.innerHTML = `
+                        <td>${bookedBy}</td>
+                        <td>${phone}</td>
+                        <td>${date}</td>
+                        <td>${time}</td>
+                        
+                        <td><button class="delete-btn">حذف</button></td>
+                    `;
+                    
+                    const deleteBtn = row.querySelector(".delete-btn");
+                    deleteBtn.onclick = function () {
+                        if (confirm("هل أنت متأكد من حذف هذا الموعد؟")) {
+                            remove(ref(database, `appointments/${key}`));
+                        }
+                    };
+                    
+                    tbody.appendChild(row);
+                });
+
+                table.appendChild(tbody);
+                list.appendChild(table);
+            });
+        }
+    
+        loadBookedAppointments();
+    </script>
+</body>
+</html>
