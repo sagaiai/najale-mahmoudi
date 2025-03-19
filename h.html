@@ -46,13 +46,34 @@
         .appointment-item {
             background-color: #F5F5F5;
             padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
+            margin: 10px auto;
+            border-radius: 12px; /* زوايا أنعم لجمالية أكبر */
             cursor: pointer;
             font-size: 18px;
-            transition: background-color 0.3s;
-           /* animation: moveLine 5s linear infinite;*/
+            transition: background-color 0.3s, transform 0.2s ease-in-out;
+            max-width: 230px;
+            width: 100%; /* استجابة أفضل */
+            aspect-ratio: 1/1; /* يجعله مربعًا دائمًا */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* ظل خفيف لجمال التصميم */
         }
+        
+        .appointment-item:hover {
+            background-color: #e0e0e0; /* تغيير لون الخلفية عند المرور */
+            transform: scale(1.05); /* تكبير بسيط عند التفاعل */
+        }
+        
+        /* تأكد من تناسبه مع جميع الأجهزة */
+        @media (max-width: 480px) {
+            .appointment-item {
+                max-width: 180px;
+                font-size: 16px;
+            }
+        }
+        
         
         .appointment-item:hover {
             background-color:  #de316294;
@@ -224,3 +245,4 @@
     </script>
 </body>
 </html>
+
